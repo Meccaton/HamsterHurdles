@@ -5,47 +5,47 @@ public class HurdleSpawner : MonoBehaviour
 {
     public int hurdleSpeed = 0;
     public GameObject hurdle;
-    public GameObject curHurdle;
     public PlayerController player;
-    public bool readyForNextHurdle = true;
+    public float recoveryTime = .5f;
+    public float approachTime = 1.0f;
+
+    private float lastJump;
+    private bool ready = true;
 
     void Start()
     {
-        //GameObject spawnedHurdle = Instantiate(hurdle);
-        //hurdleSpeed++;
+        lastJump = -999;
     }
 
     void Update()
     {
-        if (readyForNextHurdle)
+        float timeSinceJump = Time.time - lastJump;
+        float requiredTime = recoveryTime + approachTime;
+
+        if (ready && timeSinceJump >= requiredTime)
         {
             SpawnHurdle();
             hurdleSpeed++;
-            readyForNextHurdle = false;
-        }
-
-        if (curHurdle.gameObject.transform.position.x <= -12)
-        {
-            KillHurdle();
+            ready = false;
         }
     }
 
-    void SpawnHurdle()
+    private void SpawnHurdle()
     {
-        curHurdle = Instantiate(hurdle, gameObject.transform.position, gameObject.transform.rotation);
-        var hs = curHurdle.GetComponent<HurdleController>();
+        GameObject spawnedHurdle = Instantiate(hurdle, transform.position, transform.rotation);
+        var hs = spawnedHurdle.GetComponent<HurdleController>();
         hs.incrementSpeed(hurdleSpeed);
-        player.nextHurdle = curHurdle;
+        player.nextHurdle = spawnedHurdle;
     }
 
-    void KillHurdle()
+    public void OnJump()
     {
-        Destroy(curHurdle);
-        Ready();
+        lastJump = Time.time;
+        ready = true;
     }
 
     public void Ready()
     {
-        readyForNextHurdle = true;
+        ready = true;
     }
 }
