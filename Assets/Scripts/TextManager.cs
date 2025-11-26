@@ -4,15 +4,23 @@ using UnityEngine;
 public class TextManager : MonoBehaviour
 {
     public TMP_Text jumpKey;
+    public TMP_Text jumpKey2;
     public GameObject panel;
+    public GameObject panel2;
     public string jumpText;
 
     private RectTransform rt;
-
+    private RectTransform rt2;
 
     private void Start()
     {
         rt = panel.GetComponent<RectTransform>();
+        rt2 = panel2.GetComponent<RectTransform>();
+    }
+
+    public void EnableSecondKey()
+    {
+        panel2.SetActive(true);
     }
 
     public void UpdateJumpKey(KeyCode kc)
@@ -37,6 +45,51 @@ public class TextManager : MonoBehaviour
                 break;
         }
         rt.sizeDelta = newSize;
+    }
+
+    public void UpdateTwoJumpKeys(KeyCode kc1, KeyCode kc2)
+    {
+        string keyName1 = ShortenString(kc1);
+        string keyName2 = ShortenString(kc2);
+
+        jumpKey.text = keyName1;
+        Vector2 newSize = rt.sizeDelta;
+        jumpKey2.text = keyName2;
+        Vector2 newSize2 = rt2.sizeDelta;
+
+        switch (keyName1.Length)
+        {
+            case 1:
+                newSize.x = 60;
+                break;
+            case 2:
+                newSize.x = 60;
+                break;
+            case 3:
+                newSize.x = 80;
+                break;
+            default:
+                newSize.x = 150;
+                break;
+        }
+        rt.sizeDelta = newSize;
+
+        switch (keyName2.Length)
+        {
+            case 1:
+                newSize2.x = 60;
+                break;
+            case 2:
+                newSize2.x = 60;
+                break;
+            case 3:
+                newSize2.x = 80;
+                break;
+            default:
+                newSize2.x = 150;
+                break;
+        }
+        rt2.sizeDelta = newSize2;
     }
 
     public string ShortenString(KeyCode kc)

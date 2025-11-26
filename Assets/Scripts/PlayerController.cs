@@ -15,7 +15,9 @@ public class PlayerController : MonoBehaviour
     public TextManager tm;
 
     private int numJumps = 0;
-    private KeyCode jumpKey = KeyCode.Space;
+    private bool ez = true;
+    private KeyCode jumpKey1 = KeyCode.Space;
+    private KeyCode jumpKey2;
 
     void Start()
     {
@@ -25,35 +27,57 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        
-        if (Input.GetKey(jumpKey))
+        if(ez)
         {
-            if(transform.localPosition.y < -.75f)
+            if (Input.GetKeyDown(jumpKey1))
             {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
-                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+                if (transform.localPosition.y < -.75f)
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+                    rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
 
-                numJumps++;
+                    numJumps++;
 
-                if(numJumps < 6)
-                {
-                    jumpKey = kcl.getEz();
-                    tm.UpdateJumpKey(jumpKey);
+                    if (numJumps < 6)
+                    {
+                        jumpKey1 = kcl.getEz();
+                        tm.UpdateJumpKey(jumpKey1);
+                    }
+                    else if (numJumps < 11)
+                    {
+                        jumpKey1 = kcl.getMid();
+                        tm.UpdateJumpKey(jumpKey1);
+                    }
+                    else
+                    {
+                        jumpKey1 = kcl.getMid();
+                        jumpKey2 = kcl.getHard();
+                        tm.UpdateTwoJumpKeys(jumpKey1, jumpKey2);
+                        tm.EnableSecondKey();
+                        ez = false;
+                    }
                 }
-                else if(numJumps < 11)
+            }
+        }
+        else
+        {
+            if (Input.GetKey(jumpKey1) && Input.GetKey(jumpKey2))
+            {
+                if(transform.localPosition.y < -.75f)
                 {
-                    jumpKey = kcl.getMid();
-                    tm.UpdateJumpKey(jumpKey);
-                }
-                else
-                {
-                    jumpKey = kcl.getHard();
-                    tm.UpdateJumpKey(jumpKey);
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+                    rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+
+                    numJumps++;
+
+                    jumpKey1 = kcl.getMid();
+                    jumpKey2 = kcl.getHard();
+                    tm.UpdateTwoJumpKeys(jumpKey1, jumpKey2);
                 }
             }
         }
 
-        if(rb.linearVelocity.y < 0)
+        if (rb.linearVelocity.y < 0)
         {
             rb.gravityScale = fastGrav;
         }
