@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetKeyDown(jumpKey))
+        if (Input.GetKey(jumpKey))
         {
             if(transform.localPosition.y < -.75f)
             {

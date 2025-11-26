@@ -43,6 +43,10 @@ public class TextManager : MonoBehaviour
     {
         switch (kc)
         {
+            case KeyCode.LeftControl:
+                return "L-Ctrl";
+            case KeyCode.RightControl:
+                return "R-Ctrl";
             case KeyCode.UpArrow:
                 return "Up";
             case KeyCode.RightArrow:
