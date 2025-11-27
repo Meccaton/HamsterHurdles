@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     public GameObject nextHurdle = null;
     public KeyCodeLibrary kcl;
     public TextManager tm;
+    public GameObject deadPlayer;
+    public ScoreManager sm;
 
     private int numJumps = 0;
     private bool ez = true;
@@ -99,12 +101,17 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("SpawnTrigger"))
         {
+            sm.UpdateCurScore();
             spawner.OnJump();
         }
     }
 
     private void GameOver()
     {
+        gameObject.SetActive(false);
+        deadPlayer.transform.position = gameObject.transform.position;
+        deadPlayer.SetActive(true);
+        sm.SetHighScore();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
