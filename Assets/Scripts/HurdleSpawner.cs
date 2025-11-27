@@ -22,7 +22,7 @@ public class HurdleSpawner : MonoBehaviour
         float timeSinceJump = Time.time - lastJump;
         float requiredTime = recoveryTime + approachTime;
 
-        if (ready && timeSinceJump >= requiredTime)
+        if (ready)// && timeSinceJump >= requiredTime)
         {
             SpawnHurdle();
             hurdleSpeed++;
